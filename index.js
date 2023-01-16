@@ -26,10 +26,19 @@ app.get("/api/hello", function (req, res) {
   res.json({ greeting: "hello API" });
 });
 
+app.get("/api", (req, res) => {
+  res.json({
+    unix: new Date().getTime(),
+    utc: new Date().toUTCString(),
+  });
+});
+
 app.get("/api/:date", (req, res) => {
   const { date } = req.params;
 
   const updatedDate = date.includes("-") ? date : Number(date);
+  if (new Date(updatedDate.toString()) === "Invalid Date")
+    return res.json({ error: "Invalid Date" });
 
   res.json({
     unix: new Date(updatedDate).getTime(),
